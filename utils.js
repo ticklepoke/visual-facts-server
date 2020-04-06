@@ -71,6 +71,7 @@ export async function generateFacts(pathToSrc) {
   const cmdList = [
     // TODO: find out what the Java path really is...
     "JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_231.jdk/Contents/Home",
+    // TODO: point to the maven executable in ./vendors...
     "M2_HOME=/Users/ming/Desktop/FYP/app/src/vendors/apache-maven-3.6.3/bin",
     JAVA,
     "-jar",
