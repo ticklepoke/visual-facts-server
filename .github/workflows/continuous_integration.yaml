@@ -1,0 +1,17 @@
+name: CI
+on:
+  pull_request:
+    branches: master
+jobs:
+  ci_checks:
+    name: CI Checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - run: yarn
+      - run: yarn lint
+      - run: yarn test
