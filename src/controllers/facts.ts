@@ -1,7 +1,9 @@
 import { Request, Response } from 'express';
 import { isLeft } from 'fp-ts/lib/Either';
 import * as t from 'io-ts';
-import * as utils from '../utils';
+import * as java from '../language-utils/java';
+import * as git from '../utils/git';
+import * as utils from '../utils/utils';
 
 
 const FactQueryValidator = t.type({
@@ -34,8 +36,8 @@ export async function getFacts(req: Request, res: Response) {
 }
 
 async function _getFacts(repoUrl: string, commitHash: string) {
-	const repoDir = await utils.checkoutRepo(repoUrl, commitHash);
-	await utils.mavenBuild(repoDir);
+	const repoDir = await git.checkoutRepo(repoUrl, commitHash);
+	await java.mavenBuild(repoDir);
 	const facts = await utils.generateFacts(repoDir);
 	return facts;
 }
