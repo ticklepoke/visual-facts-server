@@ -10,11 +10,16 @@
     "test": "jest --passWithNoTests"
   },
   "dependencies": {
-    "express": "^4.17.1"
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "fp-ts": "^2.10.5",
+    "fs": "^0.0.1-security",
+    "io-ts": "^2.2.16"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^5.0.1",
     "@semantic-release/git": "^9.0.0",
+    "@types/cors": "^2.8.12",
     "@types/express": "^4.17.13",
     "@types/node": "^16.3.1",
     "@typescript-eslint/eslint-plugin": "^4.28.3",
