@@ -5,8 +5,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "ts-node-dev server.js",
-    "lint": "eslint '**/*.{ts}'",
-    "lint:fix": "eslint --fix '**/*.{ts}'",
+    "lint": "eslint 'src/**/*.ts'",
+    "lint:fix": "eslint --fix 'src/**/*.ts'",
     "test": "jest --passWithNoTests"
   },
   "dependencies": {
