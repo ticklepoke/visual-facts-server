@@ -1,22 +1,22 @@
 import cors from 'cors';
 import express from 'express';
+import { ok } from 'neverthrow';
 import routes from './routes';
 import { initRootFolder } from './utils/git';
 
-(async function createApp() {
-	const res = await initRootFolder();
-	if (res.isErr()) {
-		return;
-	}
-	const app = express();
-	const port = 8080;
+export function createExpressServer() {
+	return initRootFolder().andThen(() => {
+		const app = express();
+		const port = 8080;
 
-	app.use(cors());
-	app.use(express.json());
-	app.use(routes);
+		app.use(cors());
+		app.use(express.json());
+		app.use(routes);
 
-	app.listen(port, () => {
-		console.log(`Server running on port ${port}`);
+		const server = app.listen(port, () => {
+			console.log(`Server running on port ${port}`);
+		});
+
+		return ok(server);
 	});
-	return app;
-})();
+}
