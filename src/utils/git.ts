@@ -20,9 +20,9 @@ export function checkoutRepo(repoUrl: string, commitHash: string) {
 		.map(() => repoDir);
 }
 
-export function initRootFolder() {
-	if (!fs.existsSync(ROOT_PATH)) {
-		return mkdir(ROOT_PATH);
+export function initRootFolder(rootPath = ROOT_PATH) {
+	if (!fs.existsSync(rootPath)) {
+		return mkdir(rootPath);
 	}
 	return okAsync<void, unknown>(undefined);
 }

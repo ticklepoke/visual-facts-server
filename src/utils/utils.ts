@@ -10,6 +10,7 @@ const CSLICER_JAR = path.join(
 );
 const JAVA = 'java';
 
+/* istanbul ignore next */
 export function generateFacts(pathToSrc: string) {
 	console.log('Generating facts');
 	const pathToConfig = path.resolve(pathToSrc, 'cslicer-config.properties');
