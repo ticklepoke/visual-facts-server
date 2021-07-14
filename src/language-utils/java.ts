@@ -4,7 +4,8 @@ import path from 'path';
 
 const MAVEN_BIN = path.join(__dirname, './vendors/apache-maven-3.6.3/bin/mvn');
 
-function _mavenBuild(pathToSrc: string): Promise<string> {
+/* istanbul ignore next */
+exports._mavenBuild = function _mavenBuild(pathToSrc: string): Promise<string> {
 	const mvnCompile = spawn(MAVEN_BIN, ['compiler:compile'], {
 		cwd: pathToSrc,
 	});
@@ -16,11 +17,12 @@ function _mavenBuild(pathToSrc: string): Promise<string> {
 			resolve(pathToSrc);
 		});
 	});
-}
+};
 
 export function mavenBuild(pathToSrc: string) {
 	return ResultAsync.fromPromise(
-		_mavenBuild(pathToSrc),
+		exports._mavenBuild(pathToSrc),
 		() => new Error('[MVN BUILD]: Unable to execute')
 	);
 }
+
