@@ -1,6 +1,7 @@
 import fs from 'fs';
+import { ok } from 'neverthrow';
 import path from 'path';
-import { execCommandAsync } from './os';
+import { exec } from './os';
 
 // Constants
 const CSLICER_JAR = path.join(
@@ -9,7 +10,7 @@ const CSLICER_JAR = path.join(
 );
 const JAVA = 'java';
 
-export async function generateFacts(pathToSrc: string) {
+export function generateFacts(pathToSrc: string) {
 	console.log('Generating facts');
 	const pathToConfig = path.resolve(pathToSrc, 'cslicer-config.properties');
 	console.log(pathToConfig);
@@ -37,10 +38,10 @@ export async function generateFacts(pathToSrc: string) {
 	];
 	const cmd = cmdList.join(' ');
 	console.log({ cmd });
-	// Run command
-	await execCommandAsync(cmd);
-	// Get facts
-	const factLocation = path.resolve(pathToSrc, '.facts/20-deps.ta');
-	const facts = fs.readFileSync(factLocation);
-	return facts.toString();
+
+	return exec(cmd).andThen(() => {
+		const factLocation = path.resolve(pathToSrc, '.facts/20-deps.ta');
+		const facts = fs.readFileSync(factLocation);
+		return ok(facts.toString());
+	});
 }

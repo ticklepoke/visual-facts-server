@@ -1,8 +1,13 @@
 import cors from 'cors';
 import express from 'express';
 import routes from './routes';
+import { initRootFolder } from './utils/git';
 
-(function createApp() {
+(async function createApp() {
+	const res = await initRootFolder();
+	if (res.isErr()) {
+		return;
+	}
 	const app = express();
 	const port = 8080;
 

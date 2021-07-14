@@ -14,7 +14,8 @@
     "express": "^4.17.1",
     "fp-ts": "^2.10.5",
     "fs": "^0.0.1-security",
-    "io-ts": "^2.2.16"
+    "io-ts": "^2.2.16",
+    "neverthrow": "^4.2.2"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^5.0.1",

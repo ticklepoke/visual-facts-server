@@ -5,7 +5,6 @@ import * as java from '../language-utils/java';
 import * as git from '../utils/git';
 import * as utils from '../utils/utils';
 
-
 const FactQueryValidator = t.type({
 	repo_url: t.string,
 	commit_hash: t.string,
@@ -21,23 +20,21 @@ export async function getFacts(req: Request, res: Response) {
 	}
 	const { repo_url, commit_hash } = validationResult.right;
 
-	try {
-		console.log({ repo_url, commit_hash });
-		const facts = await _getFacts(repo_url, commit_hash);
+	const facts = await _getFacts(repo_url, commit_hash);
+	if (facts.isOk()) {
 		return res.status(200).json({
 			message: `Received repo_url: ${repo_url}, commit_hash: ${commit_hash}`,
-			facts: facts,
-		});
-	} catch (err) {
-		return res.status(400).json({
-			message: `Something went wrong... ${err}`,
+			facts: facts.value,
 		});
 	}
+	return res.status(400).json({
+		message: `Err: ${facts.error}`,
+	});
 }
 
-async function _getFacts(repoUrl: string, commitHash: string) {
-	const repoDir = await git.checkoutRepo(repoUrl, commitHash);
-	await java.mavenBuild(repoDir);
-	const facts = await utils.generateFacts(repoDir);
-	return facts;
+function _getFacts(repoUrl: string, commitHash: string) {
+	return git
+		.checkoutRepo(repoUrl, commitHash)
+		.andThen((repoDir) => java.mavenBuild(repoDir))
+		.andThen((repoDir) => utils.generateFacts(repoDir));
 }

@@ -1,18 +1,28 @@
-import path from 'path';
 import fs from 'fs';
-import { execCommandAsync } from './os';
+import { okAsync } from 'neverthrow';
+import path from 'path';
+import { mkdir } from './fs';
+import { exec } from './os';
 
-export async function checkoutRepo(repoUrl: string, commitHash: string) {
-	const localDir = path.join('/tmp', repoUrl);
-	// Check whether the repo has already been checked-out
-	if (!fs.existsSync(localDir)) {
-		await execCommandAsync(`git clone ${repoUrl} ${localDir}`);
-	} else {
-		await execCommandAsync(`cd ${localDir} && git fetch`);
+const ROOT_PATH = path.resolve('/tmp/visual_facts');
+export function checkoutRepo(repoUrl: string, commitHash: string) {
+	const repoDir = path.join(ROOT_PATH, repoUrl);
+	const res = (() => {
+		if (!fs.existsSync(repoDir)) {
+			return exec(`git clone ${repoUrl} ${repoDir}`);
+		} else {
+			return exec(`cd ${repoDir} && git fetch`);
+		}
+	})();
+
+	return res
+		.andThen(() => exec(`cd ${repoDir} && git checkout ${commitHash}`))
+		.map(() => repoDir);
+}
+
+export function initRootFolder() {
+	if (!fs.existsSync(ROOT_PATH)) {
+		return mkdir(ROOT_PATH);
 	}
-	// Go to that directory & checkout specific commit
-	await execCommandAsync(`cd ${localDir} && git checkout ${commitHash}`);
-	// Return path
-	console.log({ localDir });
-	return localDir;
+	return okAsync<void, unknown>(undefined);
 }

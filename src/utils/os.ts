@@ -1,14 +1,9 @@
-import { exec } from 'child_process';
+import { exec as rawExec } from 'child_process';
+import { ResultAsync } from 'neverthrow';
+import { promisify } from 'util';
 
-// TODO: check if exec can be sync
-export function execCommandAsync(command: string) {
-	return new Promise((resolve, reject) => {
-		exec(command, (err) => {
-			if (err) {
-				reject(err);
-			} else {
-				resolve(true);
-			}
-		});
-	});
-}
+export const exec = (command: string) =>
+	ResultAsync.fromPromise(
+		promisify(rawExec)(command),
+		() => new Error('[EXEC]: Unable to execute')
+	);
