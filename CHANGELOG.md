@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/ticklepoke/visual-facts-server/compare/v1.2.0...v1.3.0) (2021-07-14)
+
+
+### Features
+
+* Graceful teardown Closes [#8](https://github.com/ticklepoke/visual-facts-server/issues/8) ([#13](https://github.com/ticklepoke/visual-facts-server/issues/13)) ([adb8f46](https://github.com/ticklepoke/visual-facts-server/commit/adb8f46cb450cfdbcb35348b27535172db8593d5))
+
 # [1.2.0](https://github.com/ticklepoke/visual-facts-server/compare/v1.1.0...v1.2.0) (2021-07-14)
 
 
