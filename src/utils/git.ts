@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { okAsync } from 'neverthrow';
 import path from 'path';
-import { mkdir } from './fs';
+import { mkdir, rmdir } from './fs';
 import { exec } from './os';
 
 const ROOT_PATH = path.resolve('/tmp/visual_facts');
@@ -23,6 +23,13 @@ export function checkoutRepo(repoUrl: string, commitHash: string) {
 export function initRootFolder(rootPath = ROOT_PATH) {
 	if (!fs.existsSync(rootPath)) {
 		return mkdir(rootPath);
+	}
+	return okAsync<void, unknown>(undefined);
+}
+
+export function tearDownRootFolder(rootPath = ROOT_PATH) {
+	if (fs.existsSync(rootPath)) {
+		return rmdir(rootPath);
 	}
 	return okAsync<void, unknown>(undefined);
 }

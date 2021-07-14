@@ -2,7 +2,8 @@ import fs from 'fs';
 import { Ok, okAsync } from 'neverthrow';
 import path from 'path';
 import { promisify } from 'util';
-import { checkoutRepo, initRootFolder } from '../git';
+import { mkdir } from '../fs';
+import { checkoutRepo, initRootFolder, tearDownRootFolder } from '../git';
 import * as os from '../os';
 
 const MOCK_DIR = path.resolve('/tmp/mock');
@@ -55,6 +56,29 @@ describe('initRootFolder', () => {
 
 	it('should return ok() if folder already exists and not execute mkdir', async () => {
 		existsSyncSpy = jest.spyOn(fs, 'existsSync').mockReturnValue(true);
+		expect(await initRootFolder(MOCK_DIR)).toBeInstanceOf(Ok);
+	});
+});
+
+describe('initRootFolder', () => {
+	let existsSyncSpy: jest.SpyInstance;
+
+	afterEach(async () => {
+		existsSyncSpy.mockRestore();
+		try {
+			await rmdir(MOCK_DIR);
+			// eslint-disable-next-line no-empty
+		} catch (e) {}
+	});
+
+	it('should delete the folder and return ok()', async () => {
+		await mkdir(MOCK_DIR);
+		existsSyncSpy = jest.spyOn(fs, 'existsSync').mockReturnValue(true);
+		expect(await tearDownRootFolder(MOCK_DIR)).toBeInstanceOf(Ok);
+		expect(() => fs.readdirSync(MOCK_DIR)).toThrow();
+	});
+
+	it('should return ok() if folder does not exist and not execute rmdir', async () => {
 		expect(await initRootFolder(MOCK_DIR)).toBeInstanceOf(Ok);
 	});
 });

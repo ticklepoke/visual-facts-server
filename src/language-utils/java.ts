@@ -19,10 +19,9 @@ exports._mavenBuild = function _mavenBuild(pathToSrc: string): Promise<string> {
 	});
 };
 
-export function mavenBuild(pathToSrc: string) {
+export function mavenBuild(pathToSrc: string): ResultAsync<string, Error> {
 	return ResultAsync.fromPromise(
 		exports._mavenBuild(pathToSrc),
 		() => new Error('[MVN BUILD]: Unable to execute')
 	);
 }
-
